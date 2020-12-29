@@ -6,9 +6,9 @@ class UserController {
   async create ({ request }) {
     const data = request.all()
 
-    const user = await User.create(data)
+    const users = await User.create(data)
 
-    return user
+    return users
   }
 }
 
