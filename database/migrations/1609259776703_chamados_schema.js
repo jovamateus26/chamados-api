@@ -10,7 +10,6 @@ class ChamadosSchema extends Schema {
       table.integer('assunto_id').unsigned()
       table.string('titulo', 250)
       table.text('texto')
-      table.str
       table.timestamps()
     })
   }
