@@ -8,18 +8,11 @@
  * Resourceful controller for interacting with secretarias
  */
 const Secretaria = use('App/Models/Secretaria')
+
 class SecretariaController {
-  /**
-   * Show a list of all secretarias.
-   * GET secretarias
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
-    return Secretaria.all();
+
+  async index() {
+    return Secretaria.all()
   }
 
   /**
@@ -31,7 +24,7 @@ class SecretariaController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
+  async create({request, response, view}) {
   }
 
   /**
@@ -42,8 +35,16 @@ class SecretariaController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
-    return Secretaria.create(request.all())
+  async store({request, response, auth}) {
+    if (auth.user.tipo === 1) {
+      return Secretaria.create(request.all())
+    } else {
+      return response
+        .status(401)
+        .send([{
+          message: 'Você não possui permissão para esse recurso'
+        }])
+    }
   }
 
   /**
@@ -55,7 +56,7 @@ class SecretariaController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show({params, request, response, view}) {
   }
 
   /**
@@ -67,7 +68,7 @@ class SecretariaController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async edit ({ params, request, response, view }) {
+  async edit({params, request, response, view}) {
   }
 
   /**
@@ -78,7 +79,7 @@ class SecretariaController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({params, request, response}) {
   }
 
   /**
@@ -89,7 +90,7 @@ class SecretariaController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy({params, request, response}) {
   }
 }
 
