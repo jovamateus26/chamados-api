@@ -90,7 +90,17 @@ class SecretariaController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({params, request, response}) {
+  async destroy({params, request, response, auth}) {
+    if (auth.user.tipo === 1) {
+      const secretaria = await Secretaria.find(params.id)
+      return secretaria.delete()
+    } else {
+      return response
+        .status(401)
+        .send([{
+          message: 'Você não possui permissão para esse recurso'
+        }])
+    }
   }
 }
 

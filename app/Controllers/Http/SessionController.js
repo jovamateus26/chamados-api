@@ -12,7 +12,7 @@ class SessionController {
       await auth.check()
       response.status(200).send('logado')
     } catch (error) {
-      response.send('Missing or invalid api token')
+      response.status(401).send('Missing or invalid api token')
     }
   }
 }
