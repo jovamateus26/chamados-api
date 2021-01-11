@@ -80,6 +80,7 @@ class SecretariaController {
    * @param {Response} ctx.response
    */
   async update({params, request, response}) {
+    return params.id
   }
 
   /**

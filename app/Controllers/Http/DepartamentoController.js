@@ -20,7 +20,8 @@ class DepartamentoController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    return Departamento.all()
+    const departamento = await Departamento.query().with('secretaria').fetch()
+    return departamento
   }
 
   /**
