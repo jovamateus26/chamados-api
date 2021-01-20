@@ -1,23 +1,31 @@
 'use strict'
-
+const Assunto = use('App/Models/Assunto')
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
+
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with secretarias
+ * Resourceful controller for interacting with assuntos
  */
-const Secretaria = use('App/Models/Secretaria')
-
-class SecretariaController {
-
-  async index() {
-    return Secretaria.all()
+class AssuntoController {
+  /**
+   * Show a list of all assuntos.
+   * GET assuntos
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {View} ctx.view
+   */
+  async index({request, response, view}) {
+    const assunto = await Assunto.all()
+    return assunto
   }
 
   /**
-   * Render a form to be used for creating a new secretaria.
-   * GET secretarias/create
+   * Render a form to be used for creating a new assunto.
+   * GET assuntos/create
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -28,8 +36,8 @@ class SecretariaController {
   }
 
   /**
-   * Create/save a new secretaria.
-   * POST secretarias
+   * Create/save a new assunto.
+   * POST assuntos
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -37,7 +45,12 @@ class SecretariaController {
    */
   async store({request, response, auth}) {
     if (auth.user.tipo === 1) {
-      return Secretaria.create(request.all())
+      const data = request.only([
+        'assunto',
+        'prioridade'
+      ])
+      const assunto = Assunto.create(data)
+      return assunto
     } else {
       return response
         .status(401)
@@ -48,8 +61,8 @@ class SecretariaController {
   }
 
   /**
-   * Display a single secretaria.
-   * GET secretarias/:id
+   * Display a single assunto.
+   * GET assuntos/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -60,8 +73,8 @@ class SecretariaController {
   }
 
   /**
-   * Render a form to update an existing secretaria.
-   * GET secretarias/:id/edit
+   * Render a form to update an existing assunto.
+   * GET assuntos/:id/edit
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -72,43 +85,28 @@ class SecretariaController {
   }
 
   /**
-   * Update secretaria details.
-   * PUT or PATCH secretarias/:id
+   * Update assunto details.
+   * PUT or PATCH assuntos/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
   async update({params, request, response}) {
-    const secretaria = await Secretaria.findOrFail(params.id)
-    const data = request.only([
-      'secretaria'
-    ])
-    secretaria.merge(data)
-    await secretaria.save()
-    return secretaria
   }
 
   /**
-   * Delete a secretaria with id.
-   * DELETE secretarias/:id
+   * Delete a assunto with id.
+   * DELETE assuntos/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({params, request, response, auth}) {
-    if (auth.user.tipo === 1) {
-      const secretaria = await Secretaria.find(params.id)
-      return secretaria.delete()
-    } else {
-      return response
-        .status(401)
-        .send([{
-          message: 'Você não possui permissão para esse recurso'
-        }])
-    }
+  async destroy({params, request, response}) {
+    const assunto = await Assunto.findOrFail(params.id)
+    return await assunto.delete()
   }
 }
 
-module.exports = SecretariaController
+module.exports = AssuntoController

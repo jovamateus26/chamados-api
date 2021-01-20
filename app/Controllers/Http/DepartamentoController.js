@@ -9,6 +9,7 @@
  */
 
 const Departamento = use('App/Models/Departamento')
+
 class DepartamentoController {
   /**
    * Show a list of all departamentos.
@@ -19,7 +20,7 @@ class DepartamentoController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index({request, response, view}) {
     const departamento = await Departamento.query().with('secretaria').fetch()
     return departamento
   }
@@ -33,7 +34,7 @@ class DepartamentoController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
+  async create({request, response, view}) {
   }
 
   /**
@@ -44,8 +45,16 @@ class DepartamentoController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
-    return Departamento.create(request.all())
+  async store({request, response, auth}) {
+    if (auth.user.tipo === 1) {
+      return Departamento.create(request.all())
+    } else {
+      return response.status(401)
+        .send([{
+          message: 'Você não possui permissão para esse recurso'
+        }])
+    }
+
   }
 
   /**
@@ -57,7 +66,7 @@ class DepartamentoController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show({params, request, response, view}) {
   }
 
   /**
@@ -69,7 +78,7 @@ class DepartamentoController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async edit ({ params, request, response, view }) {
+  async edit({params, request, response, view}) {
   }
 
   /**
@@ -80,7 +89,7 @@ class DepartamentoController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({params, request, response}) {
   }
 
   /**
@@ -91,7 +100,16 @@ class DepartamentoController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy({params, request, response, auth}) {
+    if (auth.user.tipo === 1) {
+      const departamento = await Departamento.findOrFail(params.id)
+      return await departamento.delete()
+    } else {
+      return response.status(401)
+        .send([{
+          message: 'Você não possui permissão para esse recurso'
+        }])
+    }
   }
 }
 

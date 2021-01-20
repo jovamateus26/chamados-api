@@ -1,4 +1,5 @@
 'use strict'
+const Chamado = use('App/Models/Chamado')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -17,7 +18,14 @@ class ChamadoController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response, view, auth }) {
+    if (auth.user.tipo === 1) {
+      const chamado = await Chamado.query().with('assunto').fetch()
+      return chamado
+    } else {
+      const chamado = await Chamado.findBy('dono', auth.user.id)
+      return chamado
+    }
   }
 
   /**
@@ -40,7 +48,20 @@ class ChamadoController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request, response, auth }) {
+    const data = request.only([
+      'assunto_id',
+      'titulo',
+      'texto',
+      'dono'
+    ])
+    if(auth.user.tipo !== 1) {
+      data.dono = auth.user.id
+    }
+
+    const chamado = Chamado.create(data)
+
+    return chamado
   }
 
   /**

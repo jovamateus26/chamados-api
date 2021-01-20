@@ -7,9 +7,17 @@ class ChamadosSchema extends Schema {
   up () {
     this.create('chamados', (table) => {
       table.increments()
-      table.integer('assunto_id').unsigned()
       table.string('titulo', 250)
       table.text('texto')
+      table.integer('dono')
+        .unsigned()
+        .references('id')
+        .inTable('users')
+      table.integer('responsavel')
+        .unsigned()
+        .references('id')
+        .inTable('users')
+      table.integer('status').default(1)
       table.timestamps()
     })
   }
