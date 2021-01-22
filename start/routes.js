@@ -30,12 +30,18 @@ Route.resource('secretaria', 'SecretariaController')
   ]))
 
 Route.resource('assunto', 'AssuntoController')
+  .validator(new Map([
+    [['assunto.store'], ['AssuntoStore']]
+  ]))
   .middleware(new Map([
     [['store', 'update', 'destroy'], ['auth', 'isAdmin']],
     [['index'], ['auth']]
   ]))
 
 Route.resource('chamado', 'ChamadoController')
+  .validator(new Map([
+    [['chamado.store'], ['ChamadoStore']]
+  ]))
   .middleware(new Map([
     [['destroy'], ['auth', 'isAdmin']],
     [['index','store', 'update'], ['auth']]
