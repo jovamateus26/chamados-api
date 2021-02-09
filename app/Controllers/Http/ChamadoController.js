@@ -50,6 +50,7 @@ class ChamadoController {
    */
   async store ({ request, response, auth }) {
     const data = request.only([
+      'responsavel',
       'assunto_id',
       'titulo',
       'texto',
@@ -108,6 +109,14 @@ class ChamadoController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+  }
+
+  /**
+   * Função que retorna os dados necessarios para gerar o grafico da pagina inicial
+   */
+  async dadosGraficos () {
+    const total = await Chamado.query().groupBy('created_at').count()
+    return total
   }
 }
 

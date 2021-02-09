@@ -46,3 +46,4 @@ Route.resource('chamado', 'ChamadoController')
     [['destroy'], ['auth', 'isAdmin']],
     [['index','store', 'update'], ['auth']]
   ]))
+Route.get('chamados/info', 'ChamadoController.dadosGraficos')
